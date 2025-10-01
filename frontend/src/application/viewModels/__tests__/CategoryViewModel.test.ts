@@ -1,86 +1,36 @@
 import { CategoryViewModel } from '../CategoryViewModel';
 import { Category } from '../../../domain/models/Category';
-import { CategoryRepository } from '../../../domain/repositories/CategoryRepository';
+import { CategoryApiService } from '../../../infrastructure/api/CategoryApiService';
 
-// Mock CategoryRepository
-class MockCategoryRepository implements CategoryRepository {
-  private categories: Category[] = [];
-
-  async getAll(): Promise<Category[]> {
-    return [...this.categories];
-  }
-
-  async getById(id: string): Promise<Category | null> {
-    return this.categories.find(cat => cat.id === id) || null;
-  }
-
-  async create(data: { name: string; description?: string; color?: string }): Promise<Category> {
-    const category = new Category(
-      `cat-${Date.now()}`,
-      data.name,
-      data.description || '',
-      data.color || '#3b82f6',
-      new Date(),
-      new Date()
-    );
-    this.categories.push(category);
-    return category;
-  }
-
-  async update(id: string, data: { name: string; description?: string; color?: string }): Promise<Category> {
-    const index = this.categories.findIndex(cat => cat.id === id);
-    if (index === -1) {
-      throw new Error('Category not found');
-    }
-    
-    const updatedCategory = new Category(
-      id,
-      data.name,
-      data.description || '',
-      data.color || '#3b82f6',
-      this.categories[index].createdAt,
-      new Date()
-    );
-    
-    this.categories[index] = updatedCategory;
-    return updatedCategory;
-  }
-
-  async delete(id: string): Promise<void> {
-    const index = this.categories.findIndex(cat => cat.id === id);
-    if (index === -1) {
-      throw new Error('Category not found');
-    }
-    this.categories.splice(index, 1);
-  }
-}
-
-// Mock CategoryApiService
-jest.mock('../../../infrastructure/api/CategoryApiService', () => {
-  return {
-    CategoryApiService: jest.fn().mockImplementation(() => new MockCategoryRepository()),
-  };
-});
+// Mock the CategoryApiService module
+jest.mock('../../../infrastructure/api/CategoryApiService');
 
 describe('CategoryViewModel', () => {
   let viewModel: CategoryViewModel;
-  let mockRepo: MockCategoryRepository;
+  let mockApiService: jest.Mocked<CategoryApiService>;
 
   beforeEach(() => {
-    viewModel = new CategoryViewModel();
-    // @ts-ignore
-    mockRepo = viewModel.categoryRepository as MockCategoryRepository;
-  });
-
-  afterEach(() => {
+    // Clear all mocks before each test
     jest.clearAllMocks();
+    
+    // Create a new instance of the mocked service
+    mockApiService = new CategoryApiService() as jest.Mocked<CategoryApiService>;
+    
+    // Create view model
+    viewModel = new CategoryViewModel();
   });
 
   describe('getAllCategories', () => {
     it('should return all categories', async () => {
       // Arrange
-      await mockRepo.create({ name: 'Test Category 1' });
-      await mockRepo.create({ name: 'Test Category 2' });
+      const mockCategories = [
+        new Category('1', 'Test Category 1', '', '#000000', new Date(), new Date()),
+        new Category('2', 'Test Category 2', '', '#000000', new Date(), new Date()),
+      ];
+      
+      mockApiService.getAll = jest.fn().mockResolvedValue(mockCategories);
+      // @ts-ignore
+      viewModel['categoryRepository'] = mockApiService;
 
       // Act
       const categories = await viewModel.getAllCategories();
@@ -92,6 +42,11 @@ describe('CategoryViewModel', () => {
     });
 
     it('should return empty array when no categories exist', async () => {
+      // Arrange
+      mockApiService.getAll = jest.fn().mockResolvedValue([]);
+      // @ts-ignore
+      viewModel['categoryRepository'] = mockApiService;
+
       // Act
       const categories = await viewModel.getAllCategories();
 
@@ -102,6 +57,12 @@ describe('CategoryViewModel', () => {
 
   describe('createCategory', () => {
     it('should create category with valid data', async () => {
+      // Arrange
+      const mockCategory = new Category('1', 'Food', 'Food expenses', '#ff0000', new Date(), new Date());
+      mockApiService.create = jest.fn().mockResolvedValue(mockCategory);
+      // @ts-ignore
+      viewModel['categoryRepository'] = mockApiService;
+
       // Act
       const category = await viewModel.createCategory('Food', 'Food expenses', '#ff0000');
 

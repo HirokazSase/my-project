@@ -8,7 +8,7 @@ export class ApiClient {
   private baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || process.env.REACT_APP_API_URL || 'https://8080-ifw6s4rq3hfsu9qlhkkz0-6532622b.e2b.dev';
+    this.baseUrl = baseUrl || process.env.REACT_APP_API_URL || '';
   }
 
   private async request<T>(
