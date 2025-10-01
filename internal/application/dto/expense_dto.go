@@ -24,18 +24,18 @@ type UpdateExpenseRequest struct {
 
 // ExpenseResponse 経費レスポンス
 type ExpenseResponse struct {
-	ID          string                `json:"id"`
-	UserID      string                `json:"user_id"`
-	CategoryID  string                `json:"category_id"`
-	Category    *CategoryResponse      `json:"category,omitempty"`
-	Amount      float64               `json:"amount"`
-	Currency    string                `json:"currency"`
-	Title       string                `json:"title"`
-	Description string                `json:"description"`
-	Date        time.Time             `json:"date"`
-	Status      string                `json:"status"`
-	CreatedAt   time.Time             `json:"created_at"`
-	UpdatedAt   time.Time             `json:"updated_at"`
+	ID          string            `json:"id"`
+	UserID      string            `json:"user_id"`
+	CategoryID  string            `json:"category_id"`
+	Category    *CategoryResponse `json:"category,omitempty"`
+	Amount      float64           `json:"amount"`
+	Currency    string            `json:"currency"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	Date        time.Time         `json:"date"`
+	Status      string            `json:"status"`
+	CreatedAt   time.Time         `json:"created_at"`
+	UpdatedAt   time.Time         `json:"updated_at"`
 }
 
 // ExpenseListRequest 経費一覧取得リクエスト

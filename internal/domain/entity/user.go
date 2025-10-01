@@ -105,11 +105,11 @@ func (u *User) UpdateProfile(name, email string) error {
 func validateUserName(name string) error {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return errors.NewDomainError("INVALID_USER_NAME", "ユーザー名は必須です")
+		return errors.NewDomainError(errors.InvalidUserName, "ユーザー名は必須です")
 	}
 
 	if len(name) > 100 {
-		return errors.NewDomainError("INVALID_USER_NAME", "ユーザー名は100文字以内である必要があります")
+		return errors.NewDomainError(errors.InvalidUserName, "ユーザー名は100文字以内である必要があります")
 	}
 
 	return nil
@@ -119,16 +119,16 @@ func validateUserName(name string) error {
 func validateUserEmail(email string) error {
 	email = strings.TrimSpace(email)
 	if email == "" {
-		return errors.NewDomainError("INVALID_USER_EMAIL", "メールアドレスは必須です")
+		return errors.NewDomainError(errors.InvalidUserEmail, "メールアドレスは必須です")
 	}
 
 	// 簡単なメールアドレス形式チェック
 	if !strings.Contains(email, "@") || len(email) < 5 {
-		return errors.NewDomainError("INVALID_USER_EMAIL", "有効なメールアドレスを入力してください")
+		return errors.NewDomainError(errors.InvalidUserEmail, "有効なメールアドレスを入力してください")
 	}
 
 	if len(email) > 255 {
-		return errors.NewDomainError("INVALID_USER_EMAIL", "メールアドレスは255文字以内である必要があります")
+		return errors.NewDomainError(errors.InvalidUserEmail, "メールアドレスは255文字以内である必要があります")
 	}
 
 	return nil

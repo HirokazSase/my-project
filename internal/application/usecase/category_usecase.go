@@ -28,7 +28,7 @@ func (uc *CategoryUseCase) CreateCategory(ctx context.Context, req *dto.CreateCa
 	// カテゴリ名の重複チェック
 	existingCategory, err := uc.categoryRepo.FindByName(ctx, req.Name)
 	if err == nil && existingCategory != nil {
-		return nil, errors.NewApplicationError("CATEGORY_NAME_ALREADY_EXISTS", "このカテゴリ名は既に使用されています")
+		return nil, errors.NewApplicationError(errors.CategoryNameExists, "このカテゴリ名は既に使用されています")
 	}
 
 	// 新しいカテゴリを作成
@@ -39,7 +39,7 @@ func (uc *CategoryUseCase) CreateCategory(ctx context.Context, req *dto.CreateCa
 
 	// カテゴリを保存
 	if err := uc.categoryRepo.Save(ctx, category); err != nil {
-		return nil, errors.NewApplicationError("CATEGORY_CREATION_FAILED", "カテゴリの作成に失敗しました")
+		return nil, errors.NewApplicationError(errors.CategoryCreationFailed, "カテゴリの作成に失敗しました")
 	}
 
 	return &dto.CategoryResponse{
@@ -90,7 +90,7 @@ func (uc *CategoryUseCase) UpdateCategory(ctx context.Context, categoryID string
 	if req.Name != category.Name() {
 		existingCategory, err := uc.categoryRepo.FindByName(ctx, req.Name)
 		if err == nil && existingCategory != nil && !existingCategory.ID().Equals(category.ID()) {
-			return nil, errors.NewApplicationError("CATEGORY_NAME_ALREADY_EXISTS", "このカテゴリ名は既に使用されています")
+			return nil, errors.NewApplicationError(errors.CategoryNameExists, "このカテゴリ名は既に使用されています")
 		}
 	}
 
@@ -101,7 +101,7 @@ func (uc *CategoryUseCase) UpdateCategory(ctx context.Context, categoryID string
 
 	// カテゴリを保存
 	if err := uc.categoryRepo.Update(ctx, category); err != nil {
-		return nil, errors.NewApplicationError("CATEGORY_UPDATE_FAILED", "カテゴリの更新に失敗しました")
+		return nil, errors.NewApplicationError(errors.CategoryUpdateFailed, "カテゴリの更新に失敗しました")
 	}
 
 	return &dto.CategoryResponse{
@@ -123,7 +123,7 @@ func (uc *CategoryUseCase) DeleteCategory(ctx context.Context, categoryID string
 
 	exists, err := uc.categoryRepo.Exists(ctx, id)
 	if err != nil {
-		return errors.NewApplicationError("CATEGORY_DELETE_FAILED", "カテゴリの削除チェックに失敗しました")
+		return errors.NewApplicationError(errors.CategoryDeleteFailed, "カテゴリの削除チェックに失敗しました")
 	}
 
 	if !exists {
@@ -133,15 +133,15 @@ func (uc *CategoryUseCase) DeleteCategory(ctx context.Context, categoryID string
 	// このカテゴリを使用している経費があるかチェック
 	expenses, err := uc.expenseRepo.FindByCategoryID(ctx, id)
 	if err != nil {
-		return errors.NewApplicationError("CATEGORY_DELETE_FAILED", "カテゴリの使用状況チェックに失敗しました")
+		return errors.NewApplicationError(errors.CategoryDeleteFailed, "カテゴリの使用状況チェックに失敗しました")
 	}
 
 	if len(expenses) > 0 {
-		return errors.NewApplicationError("CATEGORY_IN_USE", "このカテゴリは経費で使用されているため削除できません")
+		return errors.NewApplicationError(errors.CategoryInUse, "このカテゴリは経費で使用されているため削除できません")
 	}
 
 	if err := uc.categoryRepo.Delete(ctx, id); err != nil {
-		return errors.NewApplicationError("CATEGORY_DELETE_FAILED", "カテゴリの削除に失敗しました")
+		return errors.NewApplicationError(errors.CategoryDeleteFailed, "カテゴリの削除に失敗しました")
 	}
 
 	return nil

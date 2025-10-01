@@ -2,12 +2,12 @@ package usecase
 
 import (
 	"context"
-	"testing"
-	"time"
 	"expense-management-system/internal/application/dto"
 	"expense-management-system/internal/domain/entity"
 	"expense-management-system/internal/domain/valueobject"
 	"expense-management-system/internal/infrastructure/persistence"
+	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -206,11 +206,11 @@ func TestExpenseUseCase_ApproveExpense(t *testing.T) {
 
 	amount, _ := valueobject.NewMoney(1000, "JPY")
 	expense, _ := entity.NewExpense(user.ID(), category.ID(), amount, "電車代", "営業訪問", time.Now().AddDate(0, 0, -1))
-	
+
 	// 経費を申請状態にする
 	err = expense.Submit()
 	require.NoError(t, err)
-	
+
 	err = expenseRepo.Save(ctx, expense)
 	require.NoError(t, err)
 

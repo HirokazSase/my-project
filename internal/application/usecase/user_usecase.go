@@ -26,7 +26,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *dto.CreateUserReques
 	// メールアドレスの重複チェック
 	existingUser, err := uc.userRepo.FindByEmail(ctx, req.Email)
 	if err == nil && existingUser != nil {
-		return nil, errors.NewApplicationError("EMAIL_ALREADY_EXISTS", "このメールアドレスは既に使用されています")
+		return nil, errors.NewApplicationError(errors.EmailAlreadyExists, "このメールアドレスは既に使用されています")
 	}
 
 	// 新しいユーザーを作成
@@ -37,7 +37,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *dto.CreateUserReques
 
 	// ユーザーを保存
 	if err := uc.userRepo.Save(ctx, user); err != nil {
-		return nil, errors.NewApplicationError("USER_CREATION_FAILED", "ユーザーの作成に失敗しました")
+		return nil, errors.NewApplicationError(errors.UserCreationFailed, "ユーザーの作成に失敗しました")
 	}
 
 	return &dto.UserResponse{
@@ -86,7 +86,7 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, userID string, req *dto.U
 	if req.Email != user.Email() {
 		existingUser, err := uc.userRepo.FindByEmail(ctx, req.Email)
 		if err == nil && existingUser != nil && !existingUser.ID().Equals(user.ID()) {
-			return nil, errors.NewApplicationError("EMAIL_ALREADY_EXISTS", "このメールアドレスは既に使用されています")
+			return nil, errors.NewApplicationError(errors.EmailAlreadyExists, "このメールアドレスは既に使用されています")
 		}
 	}
 
@@ -97,7 +97,7 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, userID string, req *dto.U
 
 	// ユーザーを保存
 	if err := uc.userRepo.Update(ctx, user); err != nil {
-		return nil, errors.NewApplicationError("USER_UPDATE_FAILED", "ユーザーの更新に失敗しました")
+		return nil, errors.NewApplicationError(errors.UserUpdateFailed, "ユーザーの更新に失敗しました")
 	}
 
 	return &dto.UserResponse{
@@ -118,7 +118,7 @@ func (uc *UserUseCase) DeleteUser(ctx context.Context, userID string) error {
 
 	exists, err := uc.userRepo.Exists(ctx, id)
 	if err != nil {
-		return errors.NewApplicationError("USER_DELETE_FAILED", "ユーザーの削除チェックに失敗しました")
+		return errors.NewApplicationError(errors.UserDeleteFailed, "ユーザーの削除チェックに失敗しました")
 	}
 
 	if !exists {
@@ -126,7 +126,7 @@ func (uc *UserUseCase) DeleteUser(ctx context.Context, userID string) error {
 	}
 
 	if err := uc.userRepo.Delete(ctx, id); err != nil {
-		return errors.NewApplicationError("USER_DELETE_FAILED", "ユーザーの削除に失敗しました")
+		return errors.NewApplicationError(errors.UserDeleteFailed, "ユーザーの削除に失敗しました")
 	}
 
 	return nil

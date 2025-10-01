@@ -50,7 +50,7 @@ func TestNewMoney(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			money, err := NewMoney(tt.amount, tt.currency)
-			
+
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.Nil(t, money)
@@ -58,7 +58,7 @@ func TestNewMoney(t *testing.T) {
 				require.NoError(t, err)
 				assert.NotNil(t, money)
 				assert.Equal(t, tt.amount, money.Amount())
-				
+
 				expectedCurrency := tt.currency
 				if expectedCurrency == "" {
 					expectedCurrency = "JPY"

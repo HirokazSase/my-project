@@ -299,9 +299,9 @@ func (uc *ExpenseUseCase) changeExpenseStatus(ctx context.Context, expenseID str
 // buildExpenseResponse 経費レスポンスを構築
 func (uc *ExpenseUseCase) buildExpenseResponse(expense *entity.Expense, user *entity.User, category *entity.Category) *dto.ExpenseResponse {
 	return &dto.ExpenseResponse{
-		ID:          expense.ID().String(),
-		UserID:      expense.UserID().String(),
-		CategoryID:  expense.CategoryID().String(),
+		ID:         expense.ID().String(),
+		UserID:     expense.UserID().String(),
+		CategoryID: expense.CategoryID().String(),
 		Category: &dto.CategoryResponse{
 			ID:          category.ID().String(),
 			Name:        category.Name(),
