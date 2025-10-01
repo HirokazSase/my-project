@@ -140,12 +140,14 @@ func (uc *ExpenseUseCase) UpdateExpense(ctx context.Context, expenseID string, r
 	}
 
 	// 経費情報を更新
-	if err := expense.UpdateDetails(cid, amount, req.Title, req.Description, req.Date); err != nil {
+	err = expense.UpdateDetails(cid, amount, req.Title, req.Description, req.Date)
+	if err != nil {
 		return nil, errors.NewApplicationError(errors.ValidationFailed, err.Error())
 	}
 
 	// 経費を保存
-	if err := uc.expenseRepo.Update(ctx, expense); err != nil {
+	err = uc.expenseRepo.Update(ctx, expense)
+	if err != nil {
 		return nil, errors.NewApplicationError(errors.ExpenseUpdateFailed, "経費の更新に失敗しました")
 	}
 
@@ -262,15 +264,18 @@ func (uc *ExpenseUseCase) changeExpenseStatus(ctx context.Context, expenseID str
 	// ステータス変更
 	switch action {
 	case "submit":
-		if err := expense.Submit(); err != nil {
+		err = expense.Submit()
+		if err != nil {
 			return nil, errors.NewApplicationError(errors.ValidationFailed, err.Error())
 		}
 	case "approve":
-		if err := expense.Approve(); err != nil {
+		err = expense.Approve()
+		if err != nil {
 			return nil, errors.NewApplicationError(errors.ValidationFailed, err.Error())
 		}
 	case "reject":
-		if err := expense.Reject(); err != nil {
+		err = expense.Reject()
+		if err != nil {
 			return nil, errors.NewApplicationError(errors.ValidationFailed, err.Error())
 		}
 	default:
@@ -278,7 +283,8 @@ func (uc *ExpenseUseCase) changeExpenseStatus(ctx context.Context, expenseID str
 	}
 
 	// 経費を保存
-	if err := uc.expenseRepo.Update(ctx, expense); err != nil {
+	err = uc.expenseRepo.Update(ctx, expense)
+	if err != nil {
 		return nil, errors.NewApplicationError(errors.ExpenseUpdateFailed, "経費のステータス更新に失敗しました")
 	}
 

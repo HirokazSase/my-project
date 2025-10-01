@@ -54,8 +54,8 @@ func main() {
 
 	// サーバー開始
 	go func() {
-		fmt.Printf("🚀 Server is running on port %s\n", port)
-		fmt.Printf("📖 API Documentation: http://localhost:%s/health\n", port)
+		log.Printf("🚀 Server is running on port %s", port)
+		log.Printf("📖 API Documentation: http://localhost:%s/health", port)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}
@@ -66,7 +66,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	fmt.Println("🛑 Shutting down server...")
+	log.Println("🛑 Shutting down server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -75,7 +75,7 @@ func main() {
 		log.Fatalf("Server forced to shutdown: %v", err)
 	}
 
-	fmt.Println("✅ Server exited")
+	log.Println("✅ Server exited")
 }
 
 // createSampleData サンプルデータを作成
