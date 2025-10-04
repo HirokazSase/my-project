@@ -8,7 +8,7 @@
 
 ## 🎯 プロジェクト概要
 
-**DDD（ドメイン駆動設計）** と **Clean Architecture** を採用したエンタープライズレベルの経費管理システムです。Go言語によるRESTful APIバックエンドと、React TypeScriptによるモダンなフロントエンドで構成されています。
+**DDD（ドメイン駆動設計）** と **Clean Architecture** を採用した経費管理システムです。Go言語によるRESTful APIバックエンドと、React TypeScriptで構成されています。
 
 ### ✨ 主要特徴
 
@@ -435,36 +435,3 @@ npm install
 - **ファイル名**: PascalCase (コンポーネント), camelCase (ユーティリティ)
 - **Hooks**: use prefix必須
 - **Props**: interface定義必須
-
-## 📄 ライセンス
-
-このプロジェクトは **MIT License** の下で公開されています。
-
-## 🎉 謝辞・クレジット
-
-### 技術スタック
-
-- **Backend**: [Go](https://golang.org/) + [Gin](https://gin-gonic.com/)
-- **Frontend**: [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Architecture**: [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) + [DDD](https://martinfowler.com/tags/domain%20driven%20design.html)
-
-### 参考文献
-
-- 📚 Robert C. Martin - "Clean Architecture"
-- 📘 Eric Evans - "Domain-Driven Design"
-- 📖 Martin Fowler - "Patterns of Enterprise Application Architecture"
-
----
-
-## 🏆 プロジェクトサマリー
-
-この経費管理システムは、**エンタープライズレベルのアーキテクチャパターン**と**モダンWeb技術**を組み合わせた実用的なフルスタックアプリケーションです。
-
-### 🎯 学習・ポートフォリオ価値
-
-- **🏗️ Architecture**: Clean Architecture + DDD の実践例
-- **💻 Full Stack**: Go + React の現代的技術スタック
-- **🧪 Testing**: 包括的テスト戦略の実装
-- **📊 Production Ready**: 実際のプロダクション環境で使用可能な品質
-
-**就職活動・技術アピールに最適なプロジェクト** として、設計思想から実装詳細まで体系的に学習できる教材としても活用できます。
