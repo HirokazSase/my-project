@@ -167,7 +167,6 @@ coverage.out
 go.work
 
 # Built binaries
-api
 bin/
 
 # Temporary files
